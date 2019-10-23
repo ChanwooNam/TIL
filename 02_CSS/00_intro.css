@@ -1,0 +1,41 @@
+ol, ol li {
+  font-size: 1.2rem;
+}
+
+ul, ul li{
+  font-size: 1.2em;
+}
+
+
+.vw {
+ font-size: 10vw;
+}
+
+.vh {
+  font-size: 10vh;
+ }
+
+ .div-vw {
+   width: 100px;
+   height: 100px;
+   background-color: bisque;
+ }
+
+ 
+ .div-vh {
+  width: 100px;
+  height: 100px;
+  background-color: royalblue;
+}
+
+.div-min {
+  width: 10vmin;
+  height: 10vmin;
+  background-color: salmon;
+}
+
+.div-max {
+  width: 10vmax;
+  height: 10vmax;
+  background-color: seagreen;
+}

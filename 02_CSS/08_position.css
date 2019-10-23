@@ -1,0 +1,27 @@
+body {
+  height: 10000px;
+}
+
+div {
+  width: 100px;
+  height: 100px;
+
+  background-color: crimson;
+  margin-top: 15px;
+  text-align: center;
+}
+
+.parent {
+  background-color: cyan;
+}
+
+.absolute {
+  position: absolute;
+  top: 50px;
+  left: 5px;
+}
+
+.relative {
+  position: relative;
+}
+
