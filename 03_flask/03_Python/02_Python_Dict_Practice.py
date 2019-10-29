@@ -86,8 +86,8 @@ for city, temp in cities.items():
   temp_min = min(temp)
   temp_max = max(temp)
 
-  vv = {'city' : city, 'min' : temp_min, 'max' : temp_max}
-  print(vv)
+  city = {'city' : city, 'min' : temp_min, 'max' : temp_max}
+  
 
 
 # 3-3. 위에서 서울은 영상 2도였던 적이 있나요?
