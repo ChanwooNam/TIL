@@ -17,22 +17,15 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from pages import views
+from django.urls import include, path
 
 urlpatterns = [
 
-    path('result/' ,views.result),
-    path('art/' ,views.art),
-
-    path('catch/', views.catch),
-    path('throw/', views.throw),
-
-    # '/'경로로 들어왔을 때 index 페이지
-    # 기본적으로 앞에 / 가 붙어있어서 별도로 '/'를 붙여주지 않아도 된다 
-    path('', views.index),  
-
+    # 사용자가 'pages/' 로 시작하는 경로로 들어오면,
+    # pages 앱 안의 urls.py에서 처리해라!
+    path('pages/', include('pages.urls')),
+    path('utilities/', include('utilities.urls')),
     path('admin/', admin.site.urls),
 
-
-
-    
+   
 ]

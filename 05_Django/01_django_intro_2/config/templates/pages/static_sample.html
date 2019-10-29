@@ -1,0 +1,17 @@
+{% load static %}
+
+{% block title %}
+  Static 파일 실습
+{% endblock %}
+
+{% block css %}
+ <link rel="stylesheet" href="{% static 'stylesheets/sample.css'%}">
+{% endblock %}
+
+{% block body %}
+  <h1>정적 파일 출력을 실습해봅시다. </h1>
+  <img src="{% static 'images/j.jpg'%}" alt="jango">
+{% endblock %}
+
+
+
