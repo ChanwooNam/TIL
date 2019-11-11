@@ -10,3 +10,6 @@ class Article(models.Model):
     # 객체를 표시하는 형식 커스터마이징
     def __str__(self):
         return f'[{self.pk}번글]: {self.title}|{self.content}'
+
+
+        
