@@ -20,7 +20,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'j_qnh7wea$996wl&f7k%+20eij0ppl&hh)ki=spbhjz!t22xp-'
+SECRET_KEY = 'u+6kx#70@p459o_b!c!s*fegir5hla&vx$hn)!_8y_5)g(4io4'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -31,12 +31,9 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'articles',
-    'accounts',
-    'imagekit',
+    'manytoone',
+    'manytomany',
     'django_extensions',
-    'bootstrap4',
-
 
     'django.contrib.admin',
     'django.contrib.auth',
@@ -61,7 +58,7 @@ ROOT_URLCONF = 'config.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'config', 'templates')],
+        'DIRS': [],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -110,9 +107,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
 
-LANGUAGE_CODE = 'ko-kr'
+LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'Asia/Seoul'
+TIME_ZONE = 'UTC'
 
 USE_I18N = True
 
@@ -125,13 +122,3 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
-
-# login_required 요청 경로 커스터마이징
-#  - 기본값은 '/accounts/login/'
-#LOGIN_URL = "/members/login/"
-
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-
-# 기본값 : auth.User
-AUTH_USER_MODEL = 'accounts.User'
-

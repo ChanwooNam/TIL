@@ -4,6 +4,7 @@ from . import views
 app_name = 'articles'
 urlpatterns = [
     # articles/ 로 요청했을 경우 index 함수 실행
+    
     path('', views.index, name='index'),   # READ Logic - Index
     # path('new/', views.new, name='new'),    # CREATE Logic - 폼 전달
     path('create/', views.create, name='create'),  # CREATE Logic - DB에 저장
@@ -15,5 +16,6 @@ urlpatterns = [
     path('<int:article_pk>/comments/<int:comment_pk>/delete/', views.comments_delete, name='comments_delete'),
     #path('<int:article_pk>/edit/', views.edit, name='edit'),    # UPDATE Logic - 폼 전달
     
+    path('<int:article_pk>/like', views.like, name='like'),
 
 ]

@@ -1,10 +1,11 @@
 import hashlib
+from django.contrib.auth import get_user_model
 from django.views.decorators.http import require_POST
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Article
 
-from .forms import ArticleForm 
+from .forms import ArticleForm, CommentForm
 
 from IPython import embed
 
@@ -41,6 +42,9 @@ def create(request):
             #article.save()
 
             #----- ModelForm ------
+
+            article = form.save(commit=False)
+            article.user = request.user
             article = form.save()
         return redirect('articles:detail', article.pk)
 
@@ -60,7 +64,14 @@ def detail(request, article_pk):
     #article = Article.objects.get(pk=article_pk)
     article = get_object_or_404(Article, pk=article_pk)
 
-    context = {'article': article }
+    #context = {'article': article }
+    comment_form = CommentForm()
+    comments = article.comment_set.all()
+    context = {
+        'article': article,
+        'comment_form': comment_form,
+        'comments': comments,
+    }
 
     return render(request, 'articles/detail.html', context)
 
@@ -82,36 +93,42 @@ def delete(request, article_pk):
 def update(request, article_pk):
 
     article = get_object_or_404(Article, pk=article_pk)
-
-    if request.method == 'POST':
+    if request.user == article.user:
+        if request.method == 'POST':
         #form = ArticleForm(request.POST)
 
         #----- ModelForm ------
-        form = ArticleForm(request.POST, instance=article)
+            form = ArticleForm(request.POST, instance=article)
 
-        if form.is_valid():
+            if form.is_valid():
             #article.title = form.cleaned_data.get('title')
             #article.content = form.cleaned_data.get('content')
             #article.save()
 
             #----- ModelForm ------
-            article = form.save()
+                article = form.save()
 
-        return redirect('articles:detail', article.pk)
+            return redirect('articles:detail', article.pk)
     
-    else:
+        else:
         #form = ArticleForm(initial={
         #    'title': article.title,
         #    'content': article.content,
         #})
 
         #----- ModelForm ------
-        form = ArticleForm(instance=article)
+            form = ArticleForm(instance=article)
 
     # 2가지 form 형식
     # 1. GET -> 초기값을 폼에 넣어서 사용자에게 던져줌
     # 2. POST -> is_valid가 False가 리턴됐을 때, 오류 메세지 포함해서 사용자에게 던져줌 
-    context = {'form': form}
+    #context = {'form': form}
+    else:
+        return redirect('articles:index')
+    context = {
+        'form': form,
+        'article': article
+    }
     return render(request, 'articles/form.html', context)
 
 
@@ -124,7 +141,8 @@ def comments_create(request, article_pk):
         comment_form = CommentForm(request.POST)
         if comment_form.is_valid():
             comment = comment_form.save(commit=False)
-            comment.article = article
+            comment.user = request.user
+            comment.article_id = article_pk
             comment.save()
 
     #if request.method == 'POST':
@@ -142,12 +160,58 @@ def comments_create(request, article_pk):
 @require_POST
 def comments_delete(request, article_pk, comment_pk):
 
+    # 1. 로그인 여부 확인
     if request.user.is_authenticated:
         comment = get_object_or_404(Comment, pk=comment_pk)
-        comment.delete()
-
+        # 2. 로그인한 사용자와 댓글 작성자가 같을 경우
+        if request.user == comment.user:
+            comment.delete()
+            
     #if request.method == "POST":
     #comment = get_object_or_404(Comment, pk=comment_pk)
     #comment.delete()
     
     return redirect('article:detail', article_pk)
+
+
+@login_required
+def like(request, article_pk):
+    # 좋아요 누를 게시글 가져오기
+    article = get_object_or_404(Article, pk=article_pk)
+    # 현재 접속하고 있는 유저
+    user = request.user
+
+    # 현재 게시글을 좋아요 누른 사람 목록에서, 현재 접속한 유저가 있을 경우 -> 좋아요 취소 
+    #-------------------------------------
+    # ORM 방식
+    #if article.like_users.filter(pk=user.pk).exists():
+    #    article.like_users.remove(user)
+
+    # python list in 방식 
+    if user in article.like_users.all():
+        article.like_users.remove(user)
+    # --------------------------------------
+    
+    # 목록에 없을 경우 -> 좋아요 누르기 
+    else:
+        article.like_users.add(user)
+    return redirect('articles:index')
+
+@login_required
+def follow(request, article_pk, user_pk):
+    # 게시글 작성한 유저
+    person = get_object_or_404(get_user_model(), pk=user_pk)
+    # 지금 접속하고 있는 유저
+    user = request.user
+
+    # 게시글 작성 유저 팔로워 명단에 접속 중인 유저가 있을 경우
+    # -> unfollow
+    if user in person.followers.all():
+        person.followers.remove(user)
+
+    # 목록에 없으면
+    # -> follow
+    else:
+        person.followers.add(user)
+    # 게시글 상세정보로 redirect
+    return redirect('articles:detail', article_pk)
