@@ -33,9 +33,15 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     'articles',
     'accounts',
+
     'imagekit',
     'django_extensions',
     'bootstrap4',
+    'django.contrib.sites',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.kakao',
 
 
     'django.contrib.admin',
@@ -134,4 +140,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 # 기본값 : auth.User
 AUTH_USER_MODEL = 'accounts.User'
+
+# 로그인 후 리다이렉트 경로
+LOGIN_REDIRECT_URL = 'articles:index'
 
