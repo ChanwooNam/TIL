@@ -47,8 +47,8 @@ def hello(request, name):
 
     # 넘겨줄 인자가 여러개인 경우
     context = {
-         'name' : name,
-         'pick' : pick, 
+        'name' : name,
+        'pick' : pick, 
     }
     return render(request, 'hello.html', context)
 
@@ -141,9 +141,9 @@ def ispal(request, word):
     else :
         result = False 
     context = {
-         'result' : result, 
-         'word' : word,
-         }
+        'result' : result, 
+        'word' : word,
+        }
     return render(request, 'ispal.html', context)
 
 # [실습3] 로또 번호 추첨 (리스트 + a 활용)
